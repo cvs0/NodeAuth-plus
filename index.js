@@ -4,6 +4,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const config = require('./config');
 const fs = require('fs');
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -15,13 +16,15 @@ app.use(passport.session());
 const usersData = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user.id); // Serialize user by their ID
 });
 
 passport.deserializeUser((id, done) => {
   const user = usersData.find((user) => user.id === id);
   done(null, user);
 });
+
+
 
 const LocalStrategy = require('passport-local').Strategy;
 
@@ -31,12 +34,23 @@ passport.use(
     if (!user) {
       return done(null, false, { message: 'Incorrect username.' });
     }
-    if (user.password !== password) {
-      return done(null, false, { message: 'Incorrect password.' });
-    }
-    return done(null, user);
+
+    // Compare the provided password with the stored hashed password
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (err) {
+        return done(err);
+      }
+
+      if (!isMatch) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+
+      return done(null, user);
+    });
   })
 );
+
+
 
 app.get('/login', (req, res) => {
   let style = ''; // Default style

@@ -1,17 +1,7 @@
 [
   {
     "id": 1,
-    "username": "user1",
-    "password": "password1"
-  },
-  {
-    "id": 2,
-    "username": "user2",
-    "password": "password2"
-  },
-  {
-    "id": 3,
-    "username": "hi",
-    "password": "hi"
+    "username": "admin",
+    "password": "$2b$10$IHBF4Hm11y35sMgq82gW/.uNQzHt/pg/MSzbPNSYX691US1W16/3G"
   }
 ]
