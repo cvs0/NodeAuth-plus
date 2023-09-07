@@ -1,0 +1,23 @@
+{
+  "name": "nodeauth-plus",
+  "version": "1.0.0",
+  "description": "A secure middleware authentication system for NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "csurf": "^1.11.0",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "install": "^0.13.0",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "yargs": "^17.7.2"
+  }
+}
