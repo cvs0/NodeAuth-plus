@@ -2,29 +2,24 @@ const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const config = require('./config'); // Import the configuration file
+const config = require('./config');
+const fs = require('fs');
 
 const app = express();
 
-// Middleware setup
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Set up a simple in-memory user database
-const users = [
-  { id: 1, username: 'user1', password: 'password1' },
-  { id: 2, username: 'user2', password: 'password2' },
-];
+const usersData = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
 
-// Passport configuration
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-  const user = users.find((user) => user.id === id);
+  const user = usersData.find((user) => user.id === id);
   done(null, user);
 });
 
@@ -32,7 +27,7 @@ const LocalStrategy = require('passport-local').Strategy;
 
 passport.use(
   new LocalStrategy((username, password, done) => {
-    const user = users.find((user) => user.username === username);
+    const user = usersData.find((user) => user.username === username);
     if (!user) {
       return done(null, false, { message: 'Incorrect username.' });
     }
@@ -43,12 +38,68 @@ passport.use(
   })
 );
 
-// Routes
 app.get('/login', (req, res) => {
-  res.send(
-    '<h1>Login Page</h1><form method="POST" action="/login">Username: <input type="text" name="username"><br>Password: <input type="password" name="password"><br><input type="submit" value="Login"></form>'
-  );
+  res.send(`
+    <html>
+      <head>
+      <title>${config.loginPageTitle}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+          }
+          .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px 0px #ccc;
+          }
+          h1 {
+            text-align: center;
+          }
+          form {
+            text-align: center;
+          }
+          input[type="text"],
+          input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+          }
+          input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+          }
+          input[type="submit"]:hover {
+            background-color: #0056b3;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>${config.loginPageTitle}</h1>
+          <form method="POST" action="/login">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br>
+            <input type="submit" value="Login">
+          </form>
+        </div>
+      </body>
+    </html>
+  `);
 });
+
 
 app.post(
   '/login',
@@ -59,8 +110,51 @@ app.post(
 );
 
 app.get('/dashboard', isAuthenticated, (req, res) => {
-  res.send(`<h1>Welcome, ${req.user.username}!</h1><a href="/logout">Logout</a>`);
+  res.send(`
+    <html>
+      <head>
+        <title>Dashboard</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+          }
+          .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px 0px #ccc;
+          }
+          h1 {
+            text-align: center;
+          }
+          a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 3px;
+          }
+          a:hover {
+            background-color: #0056b3;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Welcome, ${req.user.username}!</h1>
+          <a href="/logout">Logout</a>
+        </div>
+      </body>
+    </html>
+  `);
 });
+
 
 app.get('/logout', (req, res) => {
   req.logout(() => {}); // Add an empty callback function here
