@@ -39,49 +39,105 @@ passport.use(
 );
 
 app.get('/login', (req, res) => {
+  let style = ''; // Default style
+
+  if (config.styleMode === 2) {
+    // Dark style
+    style = `
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #fff;
+      }
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #333;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px 0px #666;
+      }
+      h1 {
+        text-align: center;
+      }
+      form {
+        text-align: center;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        background-color: #444;
+        border: none;
+        border-radius: 3px;
+        color: #fff;
+      }
+      input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #007BFF;
+        border: none;
+        color: #fff;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+    `;
+  } else if (config.styleMode === 3) {
+    // Light style
+    style = `
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #fff; /* Background is white */
+        color: #333; /* Text color is dark gray */
+      }
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f7f7f7; /* Container background is light gray */
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px 0px #ccc;
+      }
+      h1 {
+        text-align: center;
+        color: #333; /* Heading color is dark gray */
+      }
+      form {
+        text-align: center;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+      input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #007BFF;
+        border: none;
+        color: #fff;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+    `;
+  }
+
   res.send(`
     <html>
       <head>
-      <title>${config.loginPageTitle}</title>
+        <title>${config.loginPageTitle}</title>
         <style>
-          body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-          }
-          .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px 0px #ccc;
-          }
-          h1 {
-            text-align: center;
-          }
-          form {
-            text-align: center;
-          }
-          input[type="text"],
-          input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-          }
-          input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            border: none;
-            color: #fff;
-            border-radius: 3px;
-            cursor: pointer;
-          }
-          input[type="submit"]:hover {
-            background-color: #0056b3;
-          }
+          ${style}
         </style>
       </head>
       <body>
@@ -101,6 +157,7 @@ app.get('/login', (req, res) => {
 });
 
 
+
 app.post(
   '/login',
   passport.authenticate('local', {
@@ -110,39 +167,81 @@ app.post(
 );
 
 app.get('/dashboard', isAuthenticated, (req, res) => {
+  let style = ''; // Default style
+
+  if (config.styleMode === 2) {
+    // Dark style
+    style = `
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #fff;
+      }
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #333;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px 0px #666;
+      }
+      h1 {
+        text-align: center;
+      }
+      a {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        background-color: #007BFF;
+        color: #fff;
+        padding: 10px;
+        text-decoration: none;
+        border-radius: 3px;
+      }
+      a:hover {
+        background-color: #0056b3;
+      }
+    `;
+  } else if (config.styleMode === 3) {
+    // Light style
+    style = `
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+      }
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px 0px #ccc;
+      }
+      h1 {
+        text-align: center;
+      }
+      a {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        background-color: #007BFF;
+        color: #fff;
+        padding: 10px;
+        text-decoration: none;
+        border-radius: 3px;
+      }
+      a:hover {
+        background-color: #0056b3;
+      }
+    `;
+  }
+
   res.send(`
     <html>
       <head>
         <title>Dashboard</title>
         <style>
-          body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-          }
-          .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px 0px #ccc;
-          }
-          h1 {
-            text-align: center;
-          }
-          a {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            background-color: #007BFF;
-            color: #fff;
-            padding: 10px;
-            text-decoration: none;
-            border-radius: 3px;
-          }
-          a:hover {
-            background-color: #0056b3;
-          }
+          ${style}
         </style>
       </head>
       <body>
@@ -154,6 +253,8 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
     </html>
   `);
 });
+
+
 
 
 app.get('/logout', (req, res) => {
