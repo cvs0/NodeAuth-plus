@@ -11,14 +11,15 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100,
 });
 
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
   next();
 });
 
@@ -28,6 +29,7 @@ app.use(helmet({
   strictTransportSecurity: {
     maxAge: 31536000,
     includeSubDomains: true,
+    preload: true,
   },
   contentSecurityPolicy: {
     directives: {
@@ -51,13 +53,13 @@ app.use(helmet({
 }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
+app.use(session({ secret: config.sessionSecret, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 const usersData = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
 
 passport.serializeUser((user, done) => {
-  done(null, user.id); // Serialize user by their ID
+  done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
@@ -76,7 +78,6 @@ passport.use(
       return done(null, false, { message: 'Incorrect username.' });
     }
 
-    // Compare the provided password with the stored hashed password
     bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) {
         return done(err);
@@ -93,10 +94,9 @@ passport.use(
 
 app.get('/register', (req, res) => {
   if (config.registration) {
-    let style = ''; // Default style
+    let style = '';
 
     if (config.styleMode === 2) {
-      // Dark style
       style = `
         body {
           font-family: Arial, sans-serif;
@@ -215,10 +215,9 @@ app.get('/register', (req, res) => {
       </html>
     `);
   } else {
-    let style = ''; // Style for registration disabled screen
+    let style = '';
 
     if (config.styleMode === 2) {
-      // Dark style for registration disabled screen
       style = `
         body {
           font-family: Arial, sans-serif;
@@ -243,7 +242,6 @@ app.get('/register', (req, res) => {
         }
       `;
     } else if (config.styleMode === 3) {
-      // Light style for registration disabled screen
       style = `
         body {
           font-family: Arial, sans-serif;
@@ -292,11 +290,10 @@ app.get('/register', (req, res) => {
 
 
 app.get('/login', (req, res) => {
-  let style = ''; // Default style
-  let errorMessage = ''; // Initialize error message
+  let style = '';
+  let errorMessage = '';
 
   if (config.styleMode === 2) {
-    // Dark style
     style = `
       body {
         font-family: Arial, sans-serif;
@@ -407,7 +404,6 @@ app.get('/login', (req, res) => {
   }
 
   if (req.query.error) {
-    // Check if there is an error query parameter
     errorMessage = '<p style="color: red;">Invalid username or password.</p>';
   }
 
@@ -452,7 +448,6 @@ app.post(
 app.post('/register', async (req, res) => {
   const { username, password, captcha, captchaAnswer } = req.body;
 
-  // Ensure that captcha and captchaAnswer are both numbers
   const captchaValue = parseInt(captcha);
   const userAnswer = parseInt(captchaAnswer);
 
@@ -460,12 +455,10 @@ app.post('/register', async (req, res) => {
     return res.send('Invalid CAPTCHA input. Please enter a valid number.');
   }
 
-  // Check if the user's answer matches the CAPTCHA value
   if (captchaValue !== userAnswer) {
     return res.send('Math CAPTCHA validation failed. Please try again.');
   }
 
-  // Enforce strong password requirements (you should implement this validation)
   if (!isValidPassword(password)) {
     return res.send('Invalid password. Password must meet the requirements.');
   }
@@ -503,32 +496,26 @@ function isValidPassword(password) {
   const digitRegex = /[0-9]/;
   const specialCharRegex = /[!@#$%^&*()_+]/;
 
-  // Check the length
   if (password.length < minLength) {
     return false;
   }
 
-  // Check for at least one uppercase letter
   if (!uppercaseRegex.test(password)) {
     return false;
   }
 
-  // Check for at least one lowercase letter
   if (!lowercaseRegex.test(password)) {
     return false;
   }
 
-  // Check for at least one digit
   if (!digitRegex.test(password)) {
     return false;
   }
 
-  // Check for at least one special character
   if (!specialCharRegex.test(password)) {
     return false;
   }
 
-  // If all checks pass, the password is valid
   return true;
 }
 
@@ -537,7 +524,6 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
   let style = '';
 
   if (config.styleMode === 2) {
-    // Dark style
     style = `
       body {
         font-family: Arial, sans-serif;
@@ -570,7 +556,6 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
       }
     `;
   } else if (config.styleMode === 3) {
-    // Light style
     style = `
       body {
         font-family: Arial, sans-serif;
@@ -625,7 +610,7 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
 
 
 app.get('/logout', (req, res) => {
-  req.logout(() => {}); // Add an empty callback function here
+  req.logout(() => {});
   res.redirect('/login');
 });
 
