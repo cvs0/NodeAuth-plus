@@ -2,6 +2,7 @@ module.exports = {
   sessionSecret: 'your-secret-key',
   loginPageTitle: 'Login Page',
   port: process.env.PORT || 3000,
+  registration: true,
 
   // STYLE SETTINGS
   // 1: No style

@@ -3,5 +3,20 @@
     "id": 1,
     "username": "admin",
     "password": "$2b$10$IHBF4Hm11y35sMgq82gW/.uNQzHt/pg/MSzbPNSYX691US1W16/3G"
+  },
+  {
+    "id": "o1gu1d",
+    "username": "LMAO",
+    "password": "$2b$10$bIylGPSfstH0myZp0xpCSegTwNRJjJm3EfwIIoNyQljesIjJRHc3C"
+  },
+  {
+    "id": "b5r3z",
+    "username": "Lmao",
+    "password": "$2b$10$h3MNajzm8JUmDfSs8/vSge5BJjhIzuhegmrOhl0Y.SuQxu1ok2Kkq"
+  },
+  {
+    "id": "sguilp",
+    "username": "HiLmao",
+    "password": "$2b$10$Co7vExIdBoQNPa/B24dbB.lUEf0A2K/w94vcrdHjMGmA.PbW.NuQS"
   }
 ]
