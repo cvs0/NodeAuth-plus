@@ -606,7 +606,13 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
   `);
 });
 
-
+app.get('/', (req, res) => {
+  if(isAuthenticated) {
+    res.redirect('/dashboard');
+  } else {
+    res.redirect('/login');
+  }
+});
 
 
 app.get('/logout', (req, res) => {
