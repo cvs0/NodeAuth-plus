@@ -3,6 +3,7 @@ module.exports = {
   loginPageTitle: 'Login Page',
   port: process.env.PORT || 3000,
   registration: true,
+  actionConsoleInfo: true,
 
   // STYLE SETTINGS
   // 1: No style

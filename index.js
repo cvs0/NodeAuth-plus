@@ -484,6 +484,11 @@ app.post('/register', async (req, res) => {
 
     fs.writeFileSync('./users.json', JSON.stringify(usersData, null, 2), 'utf-8');
 
+    if(config.actionConsoleInfo) {
+      console.log('New user: ' + newUser.username, ' created from IP: ' + req.ip);
+    }
+    
+
     res.redirect('/login');
   });
 });
@@ -617,6 +622,9 @@ app.get('/', (req, res) => {
 
 app.get('/logout', (req, res) => {
   req.logout(() => {});
+  if(config.actionConsoleInfo) {
+    console.log('User : ' + req.user.username + 'Logged out from IP:'+ req.ip);
+  }
   res.redirect('/login');
 });
 
