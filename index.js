@@ -623,6 +623,6 @@ function isAuthenticated(req, res, next) {
 }
 
 const PORT = config.port;
-app.listen(PORT, () => {
+const server = app.listen(PORT, '127.0.0.1', () => {
   console.log(`Server is running on port ${PORT}`);
 });
