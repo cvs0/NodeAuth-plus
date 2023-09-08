@@ -293,6 +293,7 @@ app.get('/register', (req, res) => {
 
 app.get('/login', (req, res) => {
   let style = ''; // Default style
+  let errorMessage = ''; // Initialize error message
 
   if (config.styleMode === 2) {
     // Dark style
@@ -405,8 +406,12 @@ app.get('/login', (req, res) => {
     `;
   }
 
-  if(config.registration) {
-    res.send(`
+  if (req.query.error) {
+    // Check if there is an error query parameter
+    errorMessage = '<p style="color: red;">Invalid username or password.</p>';
+  }
+
+  res.send(`
     <html>
       <head>
         <title>${config.loginPageTitle}</title>
@@ -417,6 +422,8 @@ app.get('/login', (req, res) => {
       <body>
         <div class="container">
           <h1>${config.loginPageTitle}</h1>
+          <!-- Display the error message if present -->
+          ${errorMessage}
           <form method="POST" action="/login">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username"><br>
@@ -430,35 +437,16 @@ app.get('/login', (req, res) => {
       </body>
     </html>
   `);
-  } else {
-    res.send(`
-    <html>
-      <head>
-        <title>${config.loginPageTitle}</title>
-        <style>
-          ${style}
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h1>${config.loginPageTitle}</h1>
-          <form method="POST" action="/login">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username"><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password"><br>
-            <input type="submit" value="Login">
-          </form>
-          <!-- Apply styles to the "Don't have an account?" text -->
-        </div>
-      </body>
-    </html>
-  `);
-  }
-  
 });
 
 
+app.post(
+  '/login',
+  passport.authenticate('local', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/login',
+  })
+);
 
 
 app.post('/register', async (req, res) => {
