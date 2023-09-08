@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "cvs0",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -15,6 +15,7 @@
     "express": "^4.18.2",
     "express-rate-limit": "^6.11.0",
     "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
     "fs": "^0.0.1-security",
     "helmet": "^7.0.0",
     "install": "^0.13.0",

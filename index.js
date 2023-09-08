@@ -91,7 +91,6 @@ passport.use(
 );
 
 
-
 app.get('/login', (req, res) => {
   let style = ''; // Default style
 
