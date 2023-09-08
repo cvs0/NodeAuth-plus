@@ -5,14 +5,47 @@ const bodyParser = require('body-parser');
 const config = require('./config');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+const helmet = require('helmet');
 
 const app = express();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+});
+
+app.use('/api/', limiter);
+app.use(helmet({
+  referrerPolicy: { policy: 'same-origin' },
+  strictTransportSecurity: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+  },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", 'trusted-cdn.com'],
+    },
+  },
+  frameguard: {
+    action: 'deny'
+  },
+  contentTypeOptions: {
+    nosniff: true
+  },
+  permittedCrossDomainPolicies: {
+    permittedPolicies: 'none',
+  },
+  expectCt: {
+    enforce: true,
+    maxAge: 30,
+  }
+}));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-
 const usersData = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
 
 passport.serializeUser((user, done) => {
