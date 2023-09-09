@@ -1,7 +1,6 @@
 // cli.js
 const yargs = require('yargs');
-const { addUser } = require('./user-commands');
-
+const { addUser, deleteUser, listUsers } = require('./user-commands');
 yargs
   .command({
     command: 'add-user',
@@ -22,7 +21,27 @@ yargs
       addUser(argv.username, argv.password);
     },
   })
-
+  .command({
+    command: 'delete-user',
+    describe: 'Delete an existing user',
+    builder: {
+      username: {
+        describe: 'Username of the user to delete',
+        demandOption: true,
+        type: 'string',
+      },
+    },
+    handler: (argv) => {
+      deleteUser(argv.username);
+    },
+  })
+  .command({
+    command: 'list-users',
+    describe: 'List all existing users',
+    handler: () => {
+      listUsers();
+    },
+  })
   .help()
   
   .argv;

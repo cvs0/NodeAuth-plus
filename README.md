@@ -76,6 +76,28 @@ NodeAuth+ provides a Command Line Interface (CLI) tool that allows you to add ne
    node cli.js add-user --username cvs0 --password secret_password
    ```
 
+4. Use the following command to delete a user:
+    ```bash
+    node cli.js delete-user --username <username>
+    ```
+
+    example:
+    ```bash
+    node cli.js delete-user --username admin
+    ```
+
+5. Use the following command to list users:
+    ```bash
+    node cli.js list-users
+    ```
+
+All Commands:
+* add-user
+* delete-user
+* list-users
+* help
+
+
 The CLI will securely hash the provided password and add the new user to the authentication system and you will recieve a message indicating if it was successful.
 
 ## License

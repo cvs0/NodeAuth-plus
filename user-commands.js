@@ -24,6 +24,30 @@ const addUser = (username, password) => {
   });
 };
 
+const deleteUser = (username) => {
+  const userIndex = usersData.findIndex((user) => user.username === username);
+
+  if (userIndex === -1) {
+    console.error(`User '${username}' not found.`);
+    return;
+  }
+
+  usersData.splice(userIndex, 1);
+
+  fs.writeFileSync('./users.json', JSON.stringify(usersData, null, 2), 'utf-8');
+
+  console.log(`User '${username}' deleted successfully.`);
+};
+
+const listUsers = () => {
+  console.log('List of Users:');
+  usersData.forEach((user) => {
+    console.log(`Username: ${user.username}, ID: ${user.id}`);
+  });
+};
+
 module.exports = {
   addUser,
+  deleteUser,
+  listUsers,
 };
