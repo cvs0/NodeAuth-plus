@@ -4,6 +4,7 @@
   "description": "A secure middleware authentication system for NodeJS",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "cvs0",
