@@ -7,8 +7,8 @@ NodeAuth+ is a secure user authentication system built using Express.js, Passpor
 - User authentication with Passport.js and bcrypt for password hashing.
 - Rate limiting to prevent abuse of the API.
 - Implementation of essential security headers to protect against common web vulnerabilities.
-- Input validation and sanitization using express-validator to prevent SQL injection and XSS attacks.
 - Easily customizable styles for a login and dashboard page.
+- Frequently updated to fix bugs / vulnerabilities that arise.
 
 ## Prerequisites
 
