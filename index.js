@@ -1,4 +1,3 @@
-// TODO: Fix the server hashing the IDs.
 // TODO: Fix the HTML page to show the error messages.
 // TODO: More settings.
 // TODO: Fix the SSL too long error.
@@ -7,6 +6,7 @@
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
+const { check, validationResult } = require('express-validator');
 const bodyParser = require('body-parser');
 const config = require('./config');
 const fs = require('fs');
@@ -14,6 +14,8 @@ const bcrypt = require('bcrypt');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const LocalStrategy = require('passport-local').Strategy;
+const usersDataJson = require('./users.json');
+const { Html5Entities } = require('html-entities');
 
 const app = express();
 
@@ -85,10 +87,11 @@ passport.deserializeUser((id, done) => {
 });
 
 passport.use(
-  new LocalStrategy((username, password, done) => {
+  new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
     const user = usersData.find((user) => user.username === username);
+    
     if (!user) {
-      return done(null, false, { message: 'Incorrect username.' });
+      return done(null, false, { message: 'Invalid credentials.' });
     }
 
     bcrypt.compare(password, user.password, (err, isMatch) => {
@@ -97,13 +100,15 @@ passport.use(
       }
 
       if (!isMatch) {
-        return done(null, false, { message: 'Incorrect password.' });
+        setTimeout(() => done(null, false, { message: 'Invalid credentials.' }), 1000);
+        return;
       }
 
       return done(null, user);
     });
   })
 );
+
 
 app.get('/register', (req, res) => {
   if (config.registration) {
@@ -488,7 +493,7 @@ app.post('/register', async (req, res) => {
     }
 
     const newUser = {
-      id: Math.random().toString(36).substring(7),
+      id: usersData.length + 1,
       username,
       password: hashedPassword,
     };

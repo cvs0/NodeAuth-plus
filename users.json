@@ -5,33 +5,18 @@
     "password": "$2b$10$IHBF4Hm11y35sMgq82gW/.uNQzHt/pg/MSzbPNSYX691US1W16/3G"
   },
   {
-    "id": "o1gu1d",
-    "username": "LMAO",
-    "password": "$2b$10$bIylGPSfstH0myZp0xpCSegTwNRJjJm3EfwIIoNyQljesIjJRHc3C"
-  },
-  {
-    "id": "b5r3z",
+    "id": 2,
     "username": "Lmao",
-    "password": "$2b$10$h3MNajzm8JUmDfSs8/vSge5BJjhIzuhegmrOhl0Y.SuQxu1ok2Kkq"
+    "password": "$2b$10$J9Bct0UxpE6kRqbTTl9aRu1hk7HtDfc0CHMxWIkyGK/ilNpVm96Xy"
   },
   {
-    "id": "sguilp",
-    "username": "HiLmao",
-    "password": "$2b$10$Co7vExIdBoQNPa/B24dbB.lUEf0A2K/w94vcrdHjMGmA.PbW.NuQS"
+    "id": 3,
+    "username": "HJI",
+    "password": "$2b$10$0Op/g/RQv5eY3UItGUGoYeo7f.Xhl2H3mJiKIfIGomZ/RsHWgoOP2"
   },
   {
-    "id": "7dpg2w",
-    "username": "kayFlock",
-    "password": "$2b$10$wOLHwCw7WUZUOwVtn.jWQeURylMc50yRtXQqpHVRr1dUuR2GdC0oy"
-  },
-  {
-    "id": "8kwzd4",
-    "username": "e",
-    "password": "$2b$10$8hMLO0hiP1kkLv/LSO3YSe4MNGWR1ls9YA0.GJbnTw6AjbmG4fHd."
-  },
-  {
-    "id": "mofg5g",
-    "username": "e4",
-    "password": "$2b$10$5mA7SQ4BE4phofNHrvjop.WxCbnUqXXxX0asFk16Vqh5hXaq9Tkwi"
+    "id": 4,
+    "username": "HJIr",
+    "password": "$2b$10$r1KYsBnB0rKZjh7ixO.dIOM21nznaqDrlSHVyy7rfi./mIHlQgkCu"
   }
 ]
