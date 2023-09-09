@@ -22,5 +22,7 @@ yargs
       addUser(argv.username, argv.password);
     },
   })
+
   .help()
+  
   .argv;

@@ -1,3 +1,8 @@
+// TODO: Fix the server hashing the IDs.
+// TODO: Fix the HTML page to show the error messages.
+// TODO: More settings.
+
+
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
@@ -7,6 +12,7 @@ const fs = require('fs');
 const bcrypt = require('bcrypt');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const LocalStrategy = require('passport-local').Strategy;
 
 const app = express();
 
@@ -15,37 +21,49 @@ const limiter = rateLimit({
   max: 100,
 });
 
+const PORT = config.port;
+
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
   res.setHeader('X-Content-Type-Options', 'nosniff');
+
   next();
 });
 
 app.use('/api/', limiter);
+
 app.use(helmet({
-  referrerPolicy: { policy: 'same-origin' },
+  referrerPolicy: {
+    policy: 'same-origin'
+  },
+
   strictTransportSecurity: {
     maxAge: 31536000,
     includeSubDomains: true,
     preload: true,
   },
+
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", 'trusted-cdn.com'],
     },
   },
+
   frameguard: {
     action: 'deny'
   },
+
   contentTypeOptions: {
     nosniff: true
   },
+
   permittedCrossDomainPolicies: {
     permittedPolicies: 'none',
   },
+
   expectCt: {
     enforce: true,
     maxAge: 30,
@@ -66,10 +84,6 @@ passport.deserializeUser((id, done) => {
   const user = usersData.find((user) => user.id === id);
   done(null, user);
 });
-
-
-
-const LocalStrategy = require('passport-local').Strategy;
 
 passport.use(
   new LocalStrategy((username, password, done) => {
@@ -485,7 +499,11 @@ app.post('/register', async (req, res) => {
     fs.writeFileSync('./users.json', JSON.stringify(usersData, null, 2), 'utf-8');
 
     if(config.actionConsoleInfo) {
-      console.log('New user: ' + newUser.username, ' created from IP: ' + req.ip);
+      if(config.showIpsInOutput) {
+        console.log(config.consoleTag, ' New user created: ' + newUser.username, ' |  from IP: ' + req.ip);
+      } else {
+        console.log(config.consoleTag, ' New user created: ' + newUser.username);
+      }
     }
     
 
@@ -495,33 +513,59 @@ app.post('/register', async (req, res) => {
 
 
 function isValidPassword(password) {
-  const minLength = 8;
-  const uppercaseRegex = /[A-Z]/;
-  const lowercaseRegex = /[a-z]/;
-  const digitRegex = /[0-9]/;
-  const specialCharRegex = /[!@#$%^&*()_+]/;
+  if(config.strictPasswordsLevel == 1) {
+    const minLength = 1;
 
-  if (password.length < minLength) {
-    return false;
+    if(password.length < minLength) {
+      return false;
+    }
+
+    return true;
   }
 
-  if (!uppercaseRegex.test(password)) {
-    return false;
+  if(config.strictPasswordsLevel == 2) {
+    const minLength = 8;
+
+    if(password.length < minLength) {
+      return false;
+    }
+
+    return true;
   }
 
-  if (!lowercaseRegex.test(password)) {
-    return false;
+  if(config.strictPasswordsLevel == 3) {
+    const minLength = 8;
+    const uppercaseRegex = /[A-Z]/;
+    const lowercaseRegex = /[a-z]/;
+    const digitRegex = /[0-9]/;
+    const specialCharRegex = /[!@#$%^&*()_+]/;
+
+    if (password.length < minLength) {
+      return false;
+    }
+
+    if (!uppercaseRegex.test(password)) {
+      return false;
+    }
+
+    if (!lowercaseRegex.test(password)) {
+      return false;
+    }
+
+    if (!digitRegex.test(password)) {
+      return false;
+    }
+
+    if (!specialCharRegex.test(password)) {
+      return false;
+    }
+
+    return true;
   }
 
-  if (!digitRegex.test(password)) {
-    return false;
+  else {
+    return true;
   }
-
-  if (!specialCharRegex.test(password)) {
-    return false;
-  }
-
-  return true;
 }
 
 
@@ -621,10 +665,15 @@ app.get('/', (req, res) => {
 
 
 app.get('/logout', (req, res) => {
-  req.logout(() => {});
   if(config.actionConsoleInfo) {
-    console.log('User : ' + req.user.username + 'Logged out from IP:'+ req.ip);
+    if(config.showIpsInOutput) {
+      console.log(config.consoleTag, ' User : ' + req.user.username + 'Logged out from IP: '+ req.ip);
+    } else {
+      console.log(config.consoleTag, ' User : ' + req.user.username + 'Logged out');
+    }
   }
+
+  req.logout(() => {});
   res.redirect('/login');
 });
 
@@ -636,7 +685,6 @@ function isAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
-const PORT = config.port;
-const server = app.listen(PORT, '127.0.0.1', () => {
-  console.log(`Server is running on port ${PORT}`);
+const server = app.listen(PORT, config.host, () => {
+  console.log(config.consoleTag, ` Server is running on port ${PORT}`);
 });
