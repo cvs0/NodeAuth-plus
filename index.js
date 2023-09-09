@@ -1,12 +1,6 @@
-// TODO: Fix the HTML page to show the error messages.
-// TODO: More settings.
-// TODO: Fix the SSL too long error.
-
-
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
-const { check, validationResult } = require('express-validator');
 const bodyParser = require('body-parser');
 const config = require('./config');
 const fs = require('fs');
@@ -14,8 +8,6 @@ const bcrypt = require('bcrypt');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const LocalStrategy = require('passport-local').Strategy;
-const usersDataJson = require('./users.json');
-const { Html5Entities } = require('html-entities');
 
 const app = express();
 
@@ -29,7 +21,6 @@ app.use((req, res, next) => {
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
   res.setHeader('X-Content-Type-Options', 'nosniff');
-
   next();
 });
 
@@ -37,44 +28,41 @@ app.use('/api/', limiter);
 
 app.use(helmet({
   referrerPolicy: {
-    policy: 'same-origin'
+    policy: 'same-origin',
   },
-
   strictTransportSecurity: {
     maxAge: 31536000,
     includeSubDomains: true,
     preload: true,
   },
-
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", 'trusted-cdn.com'],
     },
   },
-
   frameguard: {
-    action: 'deny'
+    action: 'deny',
   },
-
   contentTypeOptions: {
-    nosniff: true
+    nosniff: true,
   },
-
   permittedCrossDomainPolicies: {
     permittedPolicies: 'none',
   },
-
   expectCt: {
     enforce: true,
     maxAge: 30,
-  }
+  },
 }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(session({ secret: config.sessionSecret, resave: true, saveUninitialized: true }));
+
 app.use(passport.initialize());
 app.use(passport.session());
+
 const usersData = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
 
 passport.serializeUser((user, done) => {
@@ -85,6 +73,7 @@ passport.deserializeUser((id, done) => {
   const user = usersData.find((user) => user.id === id);
   done(null, user);
 });
+
 
 passport.use(
   new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
@@ -689,6 +678,21 @@ function isAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
-const server = app.listen(config.port, config.host, () => {
-  console.log(config.consoleTag, ` Server is running on ${config.host}:${config.port}`);
+const server = app.listen(config.port, config.host, (err) => {
+  if (err) {
+    console.error(config.consoleTag, 'Server start error:', err);
+  } else {
+    console.log(
+      config.consoleTag,
+      `Server is running on ${config.host}:${config.port}`
+    );
+  }
+});
+
+process.on('uncaughtException', (err) => {
+  console.error(config.consoleTag, 'Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error(config.consoleTag, 'Unhandled Promise Rejection:', reason, promise);
 });
