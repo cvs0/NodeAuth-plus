@@ -1,6 +1,7 @@
 // TODO: Fix the server hashing the IDs.
 // TODO: Fix the HTML page to show the error messages.
 // TODO: More settings.
+// TODO: Fix the SSL too long error.
 
 
 const express = require('express');
@@ -20,8 +21,6 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
-
-const PORT = config.port;
 
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -685,6 +684,6 @@ function isAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
-const server = app.listen(PORT, config.host, () => {
-  console.log(config.consoleTag, ` Server is running on port ${PORT}`);
+const server = app.listen(config.port, config.host, () => {
+  console.log(config.consoleTag, ` Server is running on ${config.host}:${config.port}`);
 });
