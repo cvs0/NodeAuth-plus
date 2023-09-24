@@ -15,7 +15,9 @@ const flash = require('express-flash');
 
 const app = express();
 
-const rawdata = fs.readFileSync('blacklisted-ips.json');
+const dataDirectory = path.join(__dirname, 'data');
+
+const rawdata = fs.readFileSync(path.join(dataDirectory, 'blacklisted-ips.json'));
 const blacklistData = JSON.parse(rawdata);
 const blacklist = blacklistData.blacklist;
 
@@ -24,8 +26,8 @@ const limiter = rateLimit({
   max: 100,
 });
 
-const blacklistedIPsFilePath = path.join(__dirname, 'blacklisted-ips.json');
-const usersFilePath = path.join(__dirname, 'users.json');
+const blacklistedIPsFilePath = path.join(dataDirectory, 'blacklisted-ips.json');
+const usersFilePath = path.join(dataDirectory, 'users.json');
 
 function createEmptyJSONFile(filePath) {
   const emptyArray = [];
@@ -111,7 +113,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-const usersData = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
+const usersData = JSON.parse(fs.readFileSync(usersFilePath, 'utf-8'));
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -578,9 +580,9 @@ app.post('/register', async (req, res) => {
 
       if (config.actionConsoleInfo) {
         if (config.showIpsInOutput) {
-          console.log(config.consoleTag, ' New user created: ' + newUser.username, ' |  from IP: ' + req.ip);
+          console.log(config.consoleTag, 'New user created: ' + newUser.username, ' |  from IP: ' + req.ip);
         } else {
-          console.log(config.consoleTag, ' New user created: ' + newUser.username);
+          console.log(config.consoleTag, 'New user created: ' + newUser.username);
         }
       }
 
