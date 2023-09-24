@@ -2,26 +2,6 @@
   {
     "id": 1,
     "username": "admin",
-    "password": "$2b$10$IHBF4Hm11y35sMgq82gW/.uNQzHt/pg/MSzbPNSYX691US1W16/3G"
-  },
-  {
-    "id": 2,
-    "username": "Lmao",
-    "password": "$2b$10$J9Bct0UxpE6kRqbTTl9aRu1hk7HtDfc0CHMxWIkyGK/ilNpVm96Xy"
-  },
-  {
-    "id": 3,
-    "username": "HJI",
-    "password": "$2b$10$0Op/g/RQv5eY3UItGUGoYeo7f.Xhl2H3mJiKIfIGomZ/RsHWgoOP2"
-  },
-  {
-    "id": 4,
-    "username": "HJIr",
-    "password": "$2b$10$r1KYsBnB0rKZjh7ixO.dIOM21nznaqDrlSHVyy7rfi./mIHlQgkCu"
-  },
-  {
-    "id": 5,
-    "username": "HELLO",
-    "password": "$2b$10$KqksM5aSgoiCOCoBJKdTwOtBdLMpoFQRqLsE/DqkurXMO0UFzKyHe"
+    "password": "$2b$10$m2l43WmsIuSF3ABDXPTwf.gCDKK1.h/EGsFllvKGE.jNi/zc/xq3u"
   }
 ]

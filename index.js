@@ -414,7 +414,8 @@ app.get('/login', (req, res) => {
     errorMessage = '<p style="color: red;">Invalid username or password.</p>';
   }
 
-  res.send(`
+  if(config.registration) {
+    res.send(`
     <html>
       <head>
         <title>${config.loginPageTitle}</title>
@@ -440,6 +441,33 @@ app.get('/login', (req, res) => {
       </body>
     </html>
   `);
+  } else {
+    res.send(`
+    <html>
+      <head>
+        <title>${config.loginPageTitle}</title>
+        <style>
+          ${style}
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>${config.loginPageTitle}</h1>
+          <!-- Display the error message if present -->
+          ${errorMessage}
+          <form method="POST" action="/login">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br>
+            <input type="submit" value="Login">
+          </form>
+        </div>
+      </body>
+    </html>
+  `);
+  }
+  
 });
 
 
@@ -476,31 +504,36 @@ app.post('/register', async (req, res) => {
     return res.send('Username already exists. Please choose another.');
   }
 
-  bcrypt.hash(password, 10, (err, hashedPassword) => {
-    if (err) {
-      return res.status(500).send('Error hashing password');
+  bcrypt.genSalt(10, (saltError, salt) => {
+    if (saltError) {
+      return res.status(500).send('Error generating salt');
     }
 
-    const newUser = {
-      id: usersData.length + 1,
-      username,
-      password: hashedPassword,
-    };
-
-    usersData.push(newUser);
-
-    fs.writeFileSync('./users.json', JSON.stringify(usersData, null, 2), 'utf-8');
-
-    if(config.actionConsoleInfo) {
-      if(config.showIpsInOutput) {
-        console.log(config.consoleTag, ' New user created: ' + newUser.username, ' |  from IP: ' + req.ip);
-      } else {
-        console.log(config.consoleTag, ' New user created: ' + newUser.username);
+    bcrypt.hash(password, salt, (hashError, hashedPassword) => {
+      if (hashError) {
+        return res.status(500).send('Error hashing password');
       }
-    }
-    
 
-    res.redirect('/login');
+      const newUser = {
+        id: usersData.length + 1,
+        username,
+        password: hashedPassword,
+      };
+
+      usersData.push(newUser);
+
+      fs.writeFileSync('./users.json', JSON.stringify(usersData, null, 2), 'utf-8');
+
+      if (config.actionConsoleInfo) {
+        if (config.showIpsInOutput) {
+          console.log(config.consoleTag, ' New user created: ' + newUser.username, ' |  from IP: ' + req.ip);
+        } else {
+          console.log(config.consoleTag, ' New user created: ' + newUser.username);
+        }
+      }
+
+      res.redirect('/login');
+    });
   });
 });
 

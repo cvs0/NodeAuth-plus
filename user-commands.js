@@ -4,23 +4,28 @@ const config = require('./config');
 const usersData = require('./users.json');
 
 const addUser = (username, password) => {
-  bcrypt.hash(password, 10, (err, hashedPassword) => {
-    if (err) {
-      console.error('Error hashing the password:', err);
-      return;
+  bcrypt.genSalt(10, (saltError, salt) => {
+    if (saltError) {
+      return res.status(500).send('Error generating salt');
     }
 
-    const newUser = {
-      id: usersData.length + 1,
-      username,
-      password: hashedPassword,
-    };
-
-    usersData.push(newUser);
-
-    fs.writeFileSync('./users.json', JSON.stringify(usersData, null, 2), 'utf-8');
-
-    console.log(`User '${username}' added successfully.`);
+    bcrypt.hash(password, salt, (hashError, hashedPassword) => {
+      if (hashError) {
+        return res.status(500).send('Error hashing password');
+      }
+  
+      const newUser = {
+        id: usersData.length + 1,
+        username,
+        password: hashedPassword,
+      };
+  
+      usersData.push(newUser);
+  
+      fs.writeFileSync('./users.json', JSON.stringify(usersData, null, 2), 'utf-8');
+  
+      console.log(`User '${username}' added successfully.`);
+    });
   });
 };
 
