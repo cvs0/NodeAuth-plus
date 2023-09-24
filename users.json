@@ -3,5 +3,10 @@
     "id": 1,
     "username": "admin",
     "password": "$2b$10$m2l43WmsIuSF3ABDXPTwf.gCDKK1.h/EGsFllvKGE.jNi/zc/xq3u"
+  },
+  {
+    "id": 2,
+    "username": "hi",
+    "password": "$2b$10$e805yxqEkBgmWvSMhRbcEe3bNCJJJehVuBe1u2RwIE9qZirnc1mGy"
   }
 ]

@@ -1,6 +1,7 @@
 module.exports = {
   // SESSION SETTINGS
   sessionSecret: 'your-secret-key',
+  sessionTimeout: 3600000, // IN MILLISECONDS
 
   // SERVER SETTINGS
   port: process.env.PORT || 3000,

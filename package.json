@@ -23,7 +23,8 @@
     "html-entities": "^2.4.0",
     "install": "^0.13.0",
     "passport": "^0.6.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "winston": "^3.10.0"
   },
   "devDependencies": {
     "yargs": "^17.7.2"

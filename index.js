@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const LocalStrategy = require('passport-local').Strategy;
+const path = require('path');
 
 const app = express();
 
@@ -19,6 +20,24 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
+
+const blacklistedIPsFilePath = path.join(__dirname, 'blacklisted-ips.json');
+const usersFilePath = path.join(__dirname, 'users.json');
+
+function createEmptyJSONFile(filePath) {
+  const emptyArray = [];
+  fs.writeFileSync(filePath, JSON.stringify(emptyArray, null, 2), 'utf-8');
+}
+
+if (!fs.existsSync(blacklistedIPsFilePath)) {
+  createEmptyJSONFile(blacklistedIPsFilePath);
+  console.log('blacklisted-ips.json created.');
+}
+
+if (!fs.existsSync(usersFilePath)) {
+  createEmptyJSONFile(usersFilePath);
+  console.log('users.json created.');
+}
 
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -68,7 +87,16 @@ app.use(helmet({
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(session({ secret: config.sessionSecret, resave: true, saveUninitialized: true }));
+app.use(
+  session({
+    secret: config.sessionSecret,
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: config.sessionTimeout,
+    },
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -301,10 +329,6 @@ app.get('/register', (req, res) => {
     `);
   }
 });
-
-
-
-
 
 app.get('/login', (req, res) => {
   let style = '';
@@ -703,9 +727,9 @@ app.get('/', (req, res) => {
 app.get('/logout', (req, res) => {
   if(config.actionConsoleInfo) {
     if(config.showIpsInOutput) {
-      console.log(config.consoleTag, ' User : ' + req.user.username + 'Logged out from IP: '+ req.ip);
+      console.log(config.consoleTag, ' User : ' + req.user.username + ' Logged out from IP: '+ req.ip);
     } else {
-      console.log(config.consoleTag, ' User : ' + req.user.username + 'Logged out');
+      console.log(config.consoleTag, ' User : ' + req.user.username + ' Logged out');
     }
   }
 
