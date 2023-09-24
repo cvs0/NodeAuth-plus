@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
+const flash = require('express-flash');
 
 const app = express();
 
@@ -100,6 +101,7 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 const usersData = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
 
@@ -758,19 +760,21 @@ function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
+  req.flash('error', 'You must be logged in to access this page.');
   res.redirect('/login');
 }
 
+
 const server = app.listen(config.port, config.host, (err) => {
   if (err) {
-    console.error(config.consoleTag, 'Server start error:', err);
+    console.error(`${config.consoleTag} Server start error: ${err}`);
   } else {
     console.log(
-      config.consoleTag,
-      `Server is running on ${config.host}:${config.port}`
+      `${config.consoleTag} Server is running on ${config.host}:${config.port}`
     );
   }
 });
+
 
 process.on('uncaughtException', (err) => {
   console.error(config.consoleTag, 'Uncaught Exception:', err);
