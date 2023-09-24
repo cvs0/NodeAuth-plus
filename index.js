@@ -9,6 +9,8 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
+const { exec } = require('child_process');
+const os = require('os');
 const flash = require('express-flash');
 
 const app = express();
@@ -52,6 +54,12 @@ app.use((req, res, next) => {
   }
   
   next();
+});
+
+app.use((err, req, res, next) => {
+  console.error(`[${new Date().toISOString()}] Error:`, err.stack);
+
+  res.status(500).json({ error: 'Something went wrong!' });
 });
 
 app.use('/api/', limiter);
@@ -782,4 +790,45 @@ process.on('uncaughtException', (err) => {
 
 process.on('unhandledRejection', (reason, promise) => {
   console.error(config.consoleTag, 'Unhandled Promise Rejection:', reason, promise);
+});
+
+process.on('SIGINT', () => {
+  console.log('Received SIGINT. Closing server gracefully...');
+  server.close((err) => {
+    if (err) {
+      console.error('Error while closing server:', err);
+      process.exit(1);
+    }
+    console.log('Server closed. Exiting process.');
+    process.exit(0);
+  });
+});
+
+process.on('SIGTERM', () => {
+  console.log('Received SIGTERM. Closing server gracefully...');
+  server.close((err) => {
+    if (err) {
+      console.error('Error while closing server:', err);
+      process.exit(1);
+    }
+    console.log('Server closed. Exiting process.');
+    process.exit(0);
+  });
+});
+
+process.on('SIGHUP', () => {
+  console.log('Received SIGHUP signal. Restarting server...');
+
+  const isWindows = os.platform() === 'win32';
+
+  const restartScript = isWindows ? '/scripts/restart-server.bat' : '/scripts/restart-server.sh';
+
+  const scriptPath = path.join(__dirname, restartScript);
+  exec(scriptPath, (error, stdout, stderr) => {
+    if (error) {
+      console.error('Error executing restart script:', error);
+      return;
+    }
+    console.log('Server restarted successfully.');
+  });
 });
