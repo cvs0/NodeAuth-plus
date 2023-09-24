@@ -11,6 +11,10 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const app = express();
 
+const rawdata = fs.readFileSync('blacklisted-ips.json');
+const blacklistData = JSON.parse(rawdata);
+const blacklist = blacklistData.blacklist;
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -21,6 +25,12 @@ app.use((req, res, next) => {
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
   res.setHeader('X-Content-Type-Options', 'nosniff');
+
+  const clientIP = req.ip;
+  if (blacklist.includes(clientIP)) {
+    return res.status(403).send('Your IP address is blacklisted.');
+  }
+  
   next();
 });
 

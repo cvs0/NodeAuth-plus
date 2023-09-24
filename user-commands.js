@@ -29,6 +29,15 @@ const addUser = (username, password) => {
   });
 };
 
+const blacklistIP = (ip) => {
+  const rawdata = fs.readFileSync('blacklisted-ips.json');
+  const blacklistData = JSON.parse(rawdata);
+
+  blacklistData.blacklist.push(ip);
+
+  fs.writeFileSync('blacklisted-ips.json', JSON.stringify(blacklistData, null, 2), 'utf-8');
+};
+
 const deleteUser = (username) => {
   const userIndex = usersData.findIndex((user) => user.username === username);
 
@@ -55,4 +64,5 @@ module.exports = {
   addUser,
   deleteUser,
   listUsers,
+  blacklistIP,
 };
