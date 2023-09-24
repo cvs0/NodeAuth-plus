@@ -3,14 +3,21 @@ const bcrypt = require('bcrypt');
 const config = require('./config');
 const usersData = require('./users.json');
 const winston = require('winston');
+const path = require('path');
+
+const logDirectory = path.join(__dirname, 'logs');
+
+if (!fs.existsSync(logDirectory)) {
+  fs.mkdirSync(logDirectory);
+}
 
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' }),
+    new winston.transports.File({ filename: path.join(logDirectory, 'error.log'), level: 'error' }),
+    new winston.transports.File({ filename: path.join(logDirectory, 'combined.log') }),
   ],
 });
 

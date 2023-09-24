@@ -18,5 +18,10 @@
     "id": 4,
     "username": "YEVBFHJK1",
     "password": "$2b$10$QG23vWhOudr9Tslsk2aZBuC.LNbG35moDEcA4K/ANMji7Kl/OX.kS"
+  },
+  {
+    "id": 5,
+    "username": "admin1",
+    "password": "$2b$10$6bhL8PWuDkDaWlulJsXgW.DAV1BpJ/04ylpN1dE1vIODHoZE7HZZe"
   }
 ]
