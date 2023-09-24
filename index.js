@@ -507,11 +507,19 @@ app.get('/login', (req, res) => {
 
 app.post(
   '/login',
+  (req, res, next) => {
+    if (req.isAuthenticated()) {
+      return res.redirect('/dashboard');
+    }
+    next();
+  },
   passport.authenticate('local', {
     successRedirect: '/dashboard',
     failureRedirect: '/login',
+    failureFlash: true,
   })
 );
+
 
 
 app.post('/register', async (req, res) => {
