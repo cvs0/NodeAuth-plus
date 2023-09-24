@@ -717,6 +717,7 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
 
 app.get('/', (req, res) => {
   if(isAuthenticated) {
+    req.session.touch();
     res.redirect('/dashboard');
   } else {
     res.redirect('/login');
@@ -725,17 +726,24 @@ app.get('/', (req, res) => {
 
 
 app.get('/logout', (req, res) => {
-  if(config.actionConsoleInfo) {
-    if(config.showIpsInOutput) {
-      console.log(config.consoleTag, ' User : ' + req.user.username + ' Logged out from IP: '+ req.ip);
-    } else {
-      console.log(config.consoleTag, ' User : ' + req.user.username + ' Logged out');
+  if (req.isAuthenticated()) {
+    if (config.actionConsoleInfo) {
+      const userInfo = req.user ? `User: ${req.user.username}` : 'Unknown User';
+      const ipInfo = config.showIpsInOutput ? `from IP: ${req.ip}` : '';
+      console.log(`${config.consoleTag} ${userInfo} Logged out ${ipInfo}`);
     }
-  }
 
-  req.logout(() => {});
-  res.redirect('/login');
+    req.session.regenerate((err) => {
+      if (err) {
+        console.error('Error regenerating session:', err);
+      }
+      res.redirect('/login');
+    });
+  } else {
+    res.redirect('/login');
+  }
 });
+
 
 
 function isAuthenticated(req, res, next) {
