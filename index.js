@@ -575,8 +575,9 @@ app.post('/register', async (req, res) => {
       };
 
       usersData.push(newUser);
+      const userDataPath = path.join(__dirname, 'data', 'users.json');
 
-      fs.writeFileSync('./users.json', JSON.stringify(usersData, null, 2), 'utf-8');
+      fs.writeFileSync(userDataPath, JSON.stringify(usersData, null, 2), 'utf-8');
 
       if (config.actionConsoleInfo) {
         if (config.showIpsInOutput) {

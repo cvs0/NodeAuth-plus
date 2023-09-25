@@ -54,13 +54,13 @@ const addUser = (username, password) => {
 };
 
 const blacklistIP = (ip) => {
-  const rawdata = fs.readFileSync('blacklisted-ips.json');
+  const blacklistedIPsDataPath = path.join(__dirname, 'data', 'blacklisted-ips.json');
+  const rawdata = fs.readFileSync(blacklistedIPsDataPath);
   const blacklistData = JSON.parse(rawdata);
 
   blacklistData.blacklist.push(ip);
 
   try {
-    const blacklistedIPsDataPath = path.join(__dirname, 'data', 'blacklisted-ips.json');
     fs.writeFileSync(blacklistedIPsDataPath, JSON.stringify(blacklistData, null, 2), 'utf-8');
   } catch (writeError) {
     logger.error(`Error writing blacklist data to file for IP '${ip}': ${writeError.message}`);
