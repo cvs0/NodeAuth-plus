@@ -31,16 +31,19 @@ const usersFilePath = path.join(dataDirectory, 'users.json');
 
 function createEmptyJSONFile(filePath) {
   const emptyArray = [];
+  
   fs.writeFileSync(filePath, JSON.stringify(emptyArray, null, 2), 'utf-8');
 }
 
 if (!fs.existsSync(blacklistedIPsFilePath)) {
   createEmptyJSONFile(blacklistedIPsFilePath);
+
   console.log('blacklisted-ips.json created.');
 }
 
 if (!fs.existsSync(usersFilePath)) {
   createEmptyJSONFile(usersFilePath);
+
   console.log('users.json created.');
 }
 
@@ -51,6 +54,7 @@ app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
 
   const clientIP = req.ip;
+
   if (blacklist.includes(clientIP)) {
     return res.status(403).send('Your IP address is blacklisted.');
   }
@@ -121,12 +125,15 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
   const user = usersData.find((user) => user.id === id);
+
   done(null, user);
 });
 
 
 passport.use(
+
   new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
+
     const user = usersData.find((user) => user.username === username);
     
     if (!user) {
@@ -150,7 +157,9 @@ passport.use(
 
 
 app.get('/register', (req, res) => {
+
   if (config.registration) {
+
     let style = '';
 
     if (config.styleMode === 2) {
@@ -512,10 +521,8 @@ app.get('/login', (req, res) => {
       </body>
     </html>
   `);
-  }
-  
+  }  
 });
-
 
 app.post(
   '/login',
@@ -531,8 +538,6 @@ app.post(
     failureFlash: true,
   })
 );
-
-
 
 app.post('/register', async (req, res) => {
   const { username, password, captcha, captchaAnswer } = req.body;
