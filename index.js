@@ -129,7 +129,6 @@ passport.deserializeUser((id, done) => {
   done(null, user);
 });
 
-
 passport.use(
 
   new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
@@ -154,7 +153,6 @@ passport.use(
     });
   })
 );
-
 
 app.get('/register', (req, res) => {
 
@@ -597,7 +595,6 @@ app.post('/register', async (req, res) => {
   });
 });
 
-
 function isValidPassword(password) {
   if(config.strictPasswordsLevel == 1) {
     const minLength = 1;
@@ -653,7 +650,6 @@ function isValidPassword(password) {
     return true;
   }
 }
-
 
 app.get('/dashboard', isAuthenticated, (req, res) => {
   let style = '';
@@ -750,7 +746,6 @@ app.get('/', (req, res) => {
   }
 });
 
-
 app.get('/logout', (req, res) => {
   if (req.isAuthenticated()) {
     if (config.actionConsoleInfo) {
@@ -770,8 +765,6 @@ app.get('/logout', (req, res) => {
   }
 });
 
-
-
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -790,7 +783,6 @@ const server = app.listen(config.port, config.host, (err) => {
     );
   }
 });
-
 
 process.on('uncaughtException', (err) => {
   console.error(config.consoleTag, 'Uncaught Exception:', err);
