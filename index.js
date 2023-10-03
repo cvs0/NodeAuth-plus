@@ -539,7 +539,6 @@ app.post(
 
 app.post('/register', async (req, res) => {
   const { username, password, captcha, captchaAnswer } = req.body;
-
   const captchaValue = parseInt(captcha);
   const userAnswer = parseInt(captchaAnswer);
 
@@ -751,6 +750,7 @@ app.get('/logout', (req, res) => {
     if (config.actionConsoleInfo) {
       const userInfo = req.user ? `User: ${req.user.username}` : 'Unknown User';
       const ipInfo = config.showIpsInOutput ? `from IP: ${req.ip}` : '';
+
       console.log(`${config.consoleTag} ${userInfo} Logged out ${ipInfo}`);
     }
 
@@ -769,6 +769,7 @@ function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
+
   req.flash('error', 'You must be logged in to access this page.');
   res.redirect('/login');
 }
@@ -794,24 +795,33 @@ process.on('unhandledRejection', (reason, promise) => {
 
 process.on('SIGINT', () => {
   console.log('Received SIGINT. Closing server gracefully...');
+
   server.close((err) => {
+
     if (err) {
       console.error('Error while closing server:', err);
+
       process.exit(1);
     }
+
     console.log('Server closed. Exiting process.');
+
     process.exit(0);
   });
 });
 
 process.on('SIGTERM', () => {
   console.log('Received SIGTERM. Closing server gracefully...');
+
   server.close((err) => {
     if (err) {
       console.error('Error while closing server:', err);
+
       process.exit(1);
     }
+
     console.log('Server closed. Exiting process.');
+
     process.exit(0);
   });
 });
@@ -820,15 +830,16 @@ process.on('SIGHUP', () => {
   console.log('Received SIGHUP signal. Restarting server...');
 
   const isWindows = os.platform() === 'win32';
-
   const restartScript = isWindows ? '/scripts/restart-server.bat' : '/scripts/restart-server.sh';
-
   const scriptPath = path.join(__dirname, restartScript);
+
   exec(scriptPath, (error, stdout, stderr) => {
     if (error) {
       console.error('Error executing restart script:', error);
+
       return;
     }
+
     console.log('Server restarted successfully.');
   });
 });
