@@ -10,11 +10,11 @@ module.exports = {
   // REGISTRATION SETTINGS
   registration: true,
 
-    /*
-    1: Can use any password
-    2: Must be at least 8 characters long
-    3: Must be 8 characters long containing at least one number and special character with one capital letter.
-    */
+  /*
+  1: Can use any password
+  2: Must be at least 8 characters long
+  3: Must be 8 characters long containing at least one number and special character with one capital letter.
+  */
   strictPasswordsLevel: 1,
 
   // PAGE SETTINGS

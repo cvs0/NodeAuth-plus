@@ -44,6 +44,7 @@ const addUser = (username, password) => {
   
       try {
         const userDataPath = path.join(__dirname, 'data', 'users.json');
+        
         fs.writeFileSync(userDataPath, JSON.stringify(usersData, null, 2), 'utf-8');
         console.log(`User '${username}' added successfully.`);
       } catch (writeError) {
