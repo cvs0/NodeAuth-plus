@@ -16,6 +16,7 @@ Before you begin, ensure you have met the following requirements:
 
 - Node.js and npm installed on your machine.
 - Basic knowledge of Express.js, Passport.js, and web security concepts.
+- All of the libaries we used in this project.
 
 ## Getting Started
 

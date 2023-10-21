@@ -1,7 +1,7 @@
 {
   "name": "nodeauth-plus",
   "version": "1.0.0",
-  "description": "A secure middleware authentication system for NodeJS",
+  "description": "A secure authentication site system for NodeJS",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
