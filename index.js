@@ -74,26 +74,32 @@ app.use(helmet({
   referrerPolicy: {
     policy: 'same-origin',
   },
+
   strictTransportSecurity: {
     maxAge: 31536000,
     includeSubDomains: true,
     preload: true,
   },
+
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", 'trusted-cdn.com'],
     },
   },
+
   frameguard: {
     action: 'deny',
   },
+
   contentTypeOptions: {
     nosniff: true,
   },
+
   permittedCrossDomainPolicies: {
     permittedPolicies: 'none',
   },
+  
   expectCt: {
     enforce: true,
     maxAge: 30,
@@ -167,6 +173,7 @@ app.get('/register', (req, res) => {
           background-color: #000;
           color: #fff;
         }
+
         .container {
           max-width: 400px;
           margin: 0 auto;
@@ -175,12 +182,15 @@ app.get('/register', (req, res) => {
           border-radius: 5px;
           box-shadow: 0px 0px 5px 0px #666;
         }
+
         h1 {
           text-align: center;
         }
+
         form {
           text-align: center;
         }
+
         input[type="text"],
         input[type="password"] {
           width: 100%;
@@ -191,6 +201,7 @@ app.get('/register', (req, res) => {
           border-radius: 3px;
           color: #fff;
         }
+
         input[type="submit"] {
           width: 100%;
           padding: 10px;
@@ -200,6 +211,7 @@ app.get('/register', (req, res) => {
           border-radius: 3px;
           cursor: pointer;
         }
+
         input[type="submit"]:hover {
           background-color: #0056b3;
         }
@@ -211,6 +223,7 @@ app.get('/register', (req, res) => {
           font-family: Arial, sans-serif;
           background-color: #f7f7f7;
         }
+
         .container {
           max-width: 400px;
           margin: 0 auto;
@@ -219,12 +232,15 @@ app.get('/register', (req, res) => {
           border-radius: 5px;
           box-shadow: 0px 0px 5px 0px #ccc;
         }
+
         h1 {
           text-align: center;
         }
+
         form {
           text-align: center;
         }
+
         input[type="text"],
         input[type="password"] {
           width: 100%;
@@ -233,6 +249,7 @@ app.get('/register', (req, res) => {
           border: 1px solid #ccc;
           border-radius: 3px;
         }
+
         input[type="submit"] {
           width: 100%;
           padding: 10px;
@@ -242,6 +259,7 @@ app.get('/register', (req, res) => {
           border-radius: 3px;
           cursor: pointer;
         }
+
         input[type="submit"]:hover {
           background-color: #0056b3;
         }
@@ -288,6 +306,7 @@ app.get('/register', (req, res) => {
           background-color: #000;
           color: #fff;
         }
+
         .container {
           max-width: 400px;
           margin: 0 auto;
@@ -296,9 +315,11 @@ app.get('/register', (req, res) => {
           border-radius: 5px;
           box-shadow: 0px 0px 5px 0px #666;
         }
+
         h1 {
           text-align: center;
         }
+
         p {
           text-align: center;
           color: #fff;
@@ -311,6 +332,7 @@ app.get('/register', (req, res) => {
           font-family: Arial, sans-serif;
           background-color: #f7f7f7;
         }
+
         .container {
           max-width: 400px;
           margin: 0 auto;
@@ -319,9 +341,11 @@ app.get('/register', (req, res) => {
           border-radius: 5px;
           box-shadow: 0px 0px 5px 0px #ccc;
         }
+
         h1 {
           text-align: center;
         }
+
         p {
           text-align: center;
           color: #333;
@@ -360,6 +384,7 @@ app.get('/login', (req, res) => {
         background-color: #000;
         color: #fff;
       }
+
       .container {
         max-width: 400px;
         margin: 0 auto;
@@ -368,12 +393,15 @@ app.get('/login', (req, res) => {
         border-radius: 5px;
         box-shadow: 0px 0px 5px 0px #666;
       }
+
       h1 {
         text-align: center;
       }
+
       form {
         text-align: center;
       }
+
       input[type="text"],
       input[type="password"] {
         width: 100%;
@@ -384,6 +412,7 @@ app.get('/login', (req, res) => {
         border-radius: 3px;
         color: #fff;
       }
+
       input[type="submit"] {
         width: 100%;
         padding: 10px;
@@ -393,15 +422,18 @@ app.get('/login', (req, res) => {
         border-radius: 3px;
         cursor: pointer;
       }
+
       input[type="submit"]:hover {
         background-color: #0056b3;
       }
+
       /* Style for the "Don't have an account?" text */
       p {
         text-align: center;
         color: #fff;
         margin-top: 10px; /* Adjust as needed */
       }
+
       a {
         color: #007BFF;
         text-decoration: none;
@@ -415,6 +447,7 @@ app.get('/login', (req, res) => {
         background-color: #fff; /* Background is white */
         color: #333; /* Text color is dark gray */
       }
+      
       .container {
         max-width: 400px;
         margin: 0 auto;
@@ -423,13 +456,16 @@ app.get('/login', (req, res) => {
         border-radius: 5px;
         box-shadow: 0px 0px 5px 0px #ccc;
       }
+
       h1 {
         text-align: center;
         color: #333; /* Heading color is dark gray */
       }
+
       form {
         text-align: center;
       }
+
       input[type="text"],
       input[type="password"] {
         width: 100%;
@@ -438,6 +474,7 @@ app.get('/login', (req, res) => {
         border: 1px solid #ccc;
         border-radius: 3px;
       }
+
       input[type="submit"] {
         width: 100%;
         padding: 10px;
@@ -447,15 +484,18 @@ app.get('/login', (req, res) => {
         border-radius: 3px;
         cursor: pointer;
       }
+      
       input[type="submit"]:hover {
         background-color: #0056b3;
       }
+
       /* Style for the "Don't have an account?" text */
       p {
         text-align: center;
         color: #333;
         margin-top: 10px; /* Adjust as needed */
       }
+
       a {
         color: #007BFF;
         text-decoration: none;
@@ -530,6 +570,7 @@ app.post(
     }
     next();
   },
+
   passport.authenticate('local', {
     successRedirect: '/dashboard',
     failureRedirect: '/login',
@@ -577,6 +618,7 @@ app.post('/register', async (req, res) => {
       };
 
       usersData.push(newUser);
+
       const userDataPath = path.join(__dirname, 'data', 'users.json');
 
       fs.writeFileSync(userDataPath, JSON.stringify(usersData, null, 2), 'utf-8');
@@ -660,6 +702,7 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
         background-color: #000;
         color: #fff;
       }
+
       .container {
         max-width: 400px;
         margin: 0 auto;
@@ -668,9 +711,11 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
         border-radius: 5px;
         box-shadow: 0px 0px 5px 0px #666;
       }
+
       h1 {
         text-align: center;
       }
+
       a {
         display: block;
         text-align: center;
@@ -681,6 +726,7 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
         text-decoration: none;
         border-radius: 3px;
       }
+      
       a:hover {
         background-color: #0056b3;
       }
@@ -691,6 +737,7 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
         font-family: Arial, sans-serif;
         background-color: #f7f7f7;
       }
+
       .container {
         max-width: 400px;
         margin: 0 auto;
@@ -699,9 +746,11 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
         border-radius: 5px;
         box-shadow: 0px 0px 5px 0px #ccc;
       }
+
       h1 {
         text-align: center;
       }
+
       a {
         display: block;
         text-align: center;
@@ -712,6 +761,7 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
         text-decoration: none;
         border-radius: 3px;
       }
+
       a:hover {
         background-color: #0056b3;
       }
@@ -726,6 +776,7 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
           ${style}
         </style>
       </head>
+
       <body>
         <div class="container">
           <h1>Welcome, ${req.user.username}!</h1>
@@ -748,8 +799,13 @@ app.get('/', (req, res) => {
 app.get('/logout', (req, res) => {
   if (req.isAuthenticated()) {
     if (config.actionConsoleInfo) {
-      const userInfo = req.user ? `User: ${req.user.username}` : 'Unknown User';
-      const ipInfo = config.showIpsInOutput ? `from IP: ${req.ip}` : '';
+      const userInfo = req.user
+          ? `User: ${req.user.username}`
+          : 'Unknown User';
+      
+      const ipInfo = config.showIpsInOutput
+          ? `from IP: ${req.ip}`
+          : '';
 
       console.log(`${config.consoleTag} ${userInfo} Logged out ${ipInfo}`);
     }
@@ -758,6 +814,7 @@ app.get('/logout', (req, res) => {
       if (err) {
         console.error('Error regenerating session:', err);
       }
+
       res.redirect('/login');
     });
   } else {
