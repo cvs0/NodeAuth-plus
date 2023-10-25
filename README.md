@@ -103,6 +103,44 @@ All Commands:
 
 The CLI will securely hash the provided password and add the new user to the authentication system and you will recieve a message indicating if it was successful.
 
+## Legal Compliance
+
+### Privacy Policy
+
+NodeAuth-Plus is committed to safeguarding your privacy. Our privacy policy explains how we collect, use, and protect your personal information. By using this project, you consent to the practices outlined in our [Privacy Policy](/privacy-policy).
+
+### Terms of Service
+
+By accessing or using this project, you agree to comply with our [Terms of Service](/terms-of-service). These terms govern your use of the site and outline your responsibilities and obligations.
+
+### Cookie Policy
+
+We use cookies on this project. Our [Cookie Policy](/cookie-policy) provides information about our use of cookies and your options regarding their acceptance.
+
+### Accessibility
+
+We are dedicated to making our project accessible to all users. We adhere to [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/standards-guidelines/wcag/), ensuring that everyone can access and enjoy our content.
+
+### DMCA Compliance
+
+We respect intellectual property rights. If you believe your copyright is being infringed on our project, please follow our [DMCA Policy](/dmca-policy) to report copyright violations.
+
+### Compliance with GDPR
+
+If you are a resident of the European Union, our website complies with the General Data Protection Regulation ([GDPR](https://gdpr-info.eu/)). Please review our [GDPR Compliance](/gdpr-compliance) to understand your rights and our data protection practices.
+
+### CCPA Compliance
+
+If you are a resident of California, our project complies with the California Consumer Privacy Act ([CCPA](https://oag.ca.gov/privacy/ccpa)). Learn more about your privacy rights and our CCPA compliance in our [CCPA Compliance Statement](/ccpa-compliance).
+
+### Data Protection Officer (DPO)
+
+NodeAuth-Plus has appointed a Data Protection Officer (DPO) to oversee data protection activities and ensure compliance with relevant regulations. For inquiries related to data protection, you can contact our DPO at [DPO Email Address].
+
+### Consult Legal Counsel
+
+The legal landscape is complex and evolving. We strongly recommend consulting with legal counsel to ensure full compliance with all applicable laws and regulations.
+
 ## License
 
 This project is licensed under the ISC License.
