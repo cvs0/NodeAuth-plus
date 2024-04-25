@@ -1,22 +1,27 @@
-const express = require('express');
-const passport = require('passport');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const flash = require('express-flash');
-const config = require('./config');
-const fs = require('fs');
-const bcrypt = require('bcrypt');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const LocalStrategy = require('passport-local').Strategy;
-const path = require('path');
-const { exec } = require('child_process');
-const os = require('os');
+import express from 'express';
+import passport from 'passport';
+import session from 'express-session';
+import bodyParser from 'body-parser';
+import flash from 'express-flash';
+import { config } from './config.js';
+import fs from 'fs';
+import bcrypt from 'bcrypt';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import { Strategy as LocalStrategy } from 'passport-local';
+import path from 'path';
+import { exec } from 'child_process';
+import os from 'os';
+import chalk from 'chalk';
+import { URL } from 'url';
 
 const app = express();
+const __filename = new URL(import.meta.url).pathname;
+const __dirname = path.dirname(__filename.substring(1));
 
 // Define data directory
 const dataDirectory = path.join(__dirname, 'data');
+
 
 // Read and parse the blacklist data
 const rawdata = fs.readFileSync(path.join(dataDirectory, 'blacklisted-ips.json'));
@@ -33,6 +38,33 @@ const limiter = rateLimit({
 const blacklistedIPsFilePath = path.join(dataDirectory, 'blacklisted-ips.json');
 const usersFilePath = path.join(dataDirectory, 'users.json');
 
+function log(prefix, message) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+  
+  const timestamp = `[${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}]`;
+  
+  let prefixMessage;
+
+  if (prefix === "+") {
+    prefixMessage = chalk.green(`[${prefix}]`)
+  } else if (prefix === "-") {
+    prefixMessage = chalk.red(`[${prefix}]`)
+  } else if (prefix === "/") {
+    prefixMessage = chalk.yellow(`[${prefix}]`)
+  } else {
+    prefixMessage = `[${prefix}]`
+  }
+
+
+  console.log(`[${timestamp}] ` + prefixMessage + ` ${message}`)
+}
 
 // Function to create an empty JSON file with the specified file path
 function createEmptyJSONFile(filePath) {
@@ -48,7 +80,7 @@ if (!fs.existsSync(blacklistedIPsFilePath)) {
   createEmptyJSONFile(blacklistedIPsFilePath);
 
   // Log a message indicating that the file was created
-  console.log('blacklisted-ips.json created.');
+  log("+", "blacklisted-ips.json file created successfully!")
 }
 
 // Check if the users file doesn't exist
@@ -57,7 +89,7 @@ if (!fs.existsSync(usersFilePath)) {
   createEmptyJSONFile(usersFilePath);
 
   // Log a message indicating that the file was created
-  console.log('users.json created.');
+  log("+", "users.json file created successfully!")
 }
 
 
@@ -142,7 +174,6 @@ app.use(
       httpOnly: true,
       sameSite: 'strict',
     },
-    store: new MongoStore({ mongooseConnection: yourMongooseConnection }), // If using MongoDB for session storage
   })
 );
 
@@ -661,9 +692,9 @@ app.post('/register', async (req, res) => {
       // Log the new user creation if configured
       if (config.actionConsoleInfo) {
         if (config.showIpsInOutput) {
-          console.log(config.consoleTag, 'New user created: ' + newUser.username, ' |  from IP: ' + req.ip);
+          log("+", `${config.consoleTag} New user created: ${newUser.username} | from IP" ${req.ip}`)
         } else {
-          console.log(config.consoleTag, 'New user created: ' + newUser.username);
+          log("+", `${config.consoleTag} New user created: ${newUser.username}`)
         }
       }
 
@@ -823,13 +854,13 @@ app.get('/logout', (req, res) => {
       const userInfo = req.user ? `User: ${req.user.username}` : 'Unknown User';
       const ipInfo = config.showIpsInOutput ? `from IP: ${req.ip}` : '';
 
-      console.log(`${config.consoleTag} ${userInfo} Logged out ${ipInfo}`);
+      log("+", `${config.consoleTag} + ${userInfo} Logged out ${ipInfo}`);
     }
 
     // Regenerate the session to log the user out
     req.session.regenerate((err) => {
       if (err) {
-        console.error('Error regenerating session:', err);
+        log("-", "Error regenerating session: " + err)
       }
 
       // Redirect to the login page after logout
@@ -857,60 +888,59 @@ function isAuthenticated(req, res, next) {
 const server = app.listen(config.port, config.host, (err) => {
   if (err) {
     // Handle server start error and log it
-    console.error(`${config.consoleTag} Server start error: ${err}`);
+    log("-", `${config.consoleTag} Server start error: ${err}`)
   } else {
     // Server started successfully, log the server's address
-    console.log(
+    log(
+      "+",
       `${config.consoleTag} Server is running on ${config.host}:${config.port}`
     );
   }
 });
 
-
 // Handle uncaught exceptions
 process.on('uncaughtException', (err) => {
-  console.error(config.consoleTag, 'Uncaught Exception:', err);
+  log('-', `Uncaught Exception: ${err}`);
 });
-
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
-  console.error(config.consoleTag, 'Unhandled Promise Rejection:', reason, promise);
+  log('-', 'Unhandled Promise Rejection:', reason, promise);
 });
 
 // Handle SIGINT (Ctrl+C) to gracefully close the server
 process.on('SIGINT', () => {
-  console.log('Received SIGINT. Closing server gracefully...');
+  log('-', 'Received SIGINT. Closing server gracefully...');
 
   server.close((err) => {
     if (err) {
-      console.error('Error while closing server:', err);
+      log('-', 'Error while closing server:', err);
       process.exit(1);
     }
 
-    console.log('Server closed. Exiting process.');
+    log('-', 'Server closed. Exiting process.');
     process.exit(0);
   });
 });
 
 // Handle SIGTERM to gracefully close the server
 process.on('SIGTERM', () => {
-  console.log('Received SIGTERM. Closing server gracefully...');
+  log('-', 'Received SIGTERM. Closing server gracefully...');
 
   server.close((err) => {
     if (err) {
-      console.error('Error while closing server:', err);
+      log('-', 'Error while closing server:', err);
       process.exit(1);
     }
 
-    console.log('Server closed. Exiting process.');
+    log('-', 'Server closed. Exiting process.');
     process.exit(0);
   });
 });
 
 // Handle SIGHUP signal for server restart
 process.on('SIGHUP', () => {
-  console.log('Received SIGHUP signal. Restarting server...');
+  log('+', 'Received SIGHUP signal. Restarting server...');
 
   const isWindows = os.platform() === 'win32';
   const restartScript = isWindows ? '/scripts/restart-server.bat' : '/scripts/restart-server.sh';
@@ -919,10 +949,10 @@ process.on('SIGHUP', () => {
   // Execute the restart script
   exec(scriptPath, (error, stdout, stderr) => {
     if (error) {
-      console.error('Error executing restart script:', error);
+      log('-', 'Error executing restart script:', error);
       return;
     }
 
-    console.log('Server restarted successfully.');
+    log('+', 'Server restarted successfully.');
   });
 });

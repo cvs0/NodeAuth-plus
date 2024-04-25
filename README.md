@@ -39,7 +39,7 @@ Before you begin, ensure you have met the following requirements:
 5. Create a users.json file to store user data.
 6. Start the application:
     ```bash
-    npm start
+    node index.mjs
     ```
 
 ## Usage

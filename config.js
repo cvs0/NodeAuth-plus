@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   // SESSION SETTINGS
   sessionSecret: 'your-secret-key',
   sessionTimeout: 3600000, // IN MILLISECONDS
@@ -29,5 +29,7 @@ module.exports = {
   // 1: No style
   // 2: Dark style
   // 3: Light style
-  styleMode: 3,
+  styleMode: 2,
 };
+
+export { config }
