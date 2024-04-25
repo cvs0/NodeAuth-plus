@@ -133,10 +133,6 @@ If you are a resident of the European Union, our website complies with the Gener
 
 If you are a resident of California, our project complies with the California Consumer Privacy Act ([CCPA](https://oag.ca.gov/privacy/ccpa)). Learn more about your privacy rights and our CCPA compliance in our [CCPA Compliance Statement](/ccpa-compliance).
 
-### Data Protection Officer (DPO)
-
-NodeAuth-Plus has appointed a Data Protection Officer (DPO) to oversee data protection activities and ensure compliance with relevant regulations. For inquiries related to data protection, you can contact our DPO at [DPO Email Address].
-
 ### Consult Legal Counsel
 
 The legal landscape is complex and evolving. We strongly recommend consulting with legal counsel to ensure full compliance with all applicable laws and regulations.
